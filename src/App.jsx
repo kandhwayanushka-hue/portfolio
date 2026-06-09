@@ -2,16 +2,15 @@ import { useState, useEffect, useRef } from 'react'
 import { motion, useScroll, useTransform, useSpring, useInView } from 'framer-motion'
 
 const skills = {
-  frontend: ['HTML', 'CSS', 'JavaScript', 'React'],
-  backend: ['Python', 'Django', 'C++'],
-  tools: ['Git', 'Agentic AI', 'Vercel']
+  frontend: ['HTML', 'CSS', 'JavaScript', 'React', 'Bootstrap', 'Tailwind'],
+  backend: ['Python', 'C++', 'Java', 'Spring Boot', 'Node.js'],
+  tools: ['Git', 'GitHub', 'MySQL', 'Vercel']
 }
 
 const journey = [
-  { year: '2024', title: 'Started Building', description: 'First commit. First repo. Started learning full-stack.' },
-  { year: '2024', title: 'Open Source', description: 'First PR to Welcome-to-Open-Source. Never looked back.' },
-  { year: '2025', title: 'Learning Stack', description: 'React, Django, Agentic AI. The edges of what\'s possible.' },
-  { year: '2026', title: 'Ship or Die', description: 'Building things that matter. Showing, not telling.' },
+  { year: '2024', title: 'First Steps', description: 'Wrote my first lines of code. Started with Python and C++.' },
+  { year: '2025', title: 'Web Dev', description: 'Discovered React, Tailwind, and the joy of building for the web.' },
+  { year: '2026', title: 'Deepening', description: 'Exploring Java, Spring Boot, Data Science, and open source.' },
 ]
 
 const philosophy = [
@@ -240,7 +239,7 @@ function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.8 }}
         >
-          FULL-STACK DEVELOPER
+          LEARNING. BUILDING. GROWING.
         </motion.p>
         
         <div className="overflow-hidden">
@@ -272,7 +271,7 @@ function Hero() {
           transition={{ delay: 0.8 }}
         >
           <p className="text-2xl md:text-4xl font-body text-text-secondary">
-            <AnimatedText text="I don't talk about code. I write it." delay={0.8} />
+            <AnimatedText text="Every line of code is a lesson learned." delay={0.8} />
             <motion.span 
               className="text-accent ml-2 inline-block w-2 h-8 md:h-12 align-middle bg-accent"
               animate={{ opacity: [1, 0, 1] }}
@@ -370,15 +369,15 @@ function About() {
               className="mt-8 text-xl text-text-secondary leading-relaxed max-w-xl"
               variants={fadeInUp}
             >
-              Currently building with <span className="text-accent">React</span>, <span className="text-accent">Django</span>, and <span className="text-accent">Agentic AI</span>. 
-              Making things that work. Shipping code that ships.
+              Exploring <span className="text-accent">React</span>, <span className="text-accent">Spring Boot</span>, and <span className="text-accent">Data Science</span>. 
+              Learning every day, building along the way.
             </motion.p>
           </div>
           
           <div className="md:col-span-5 space-y-8 mt-8 md:mt-0">
             {[
-              { label: 'LOCATION', value: 'Ranchi, India' },
-              { label: 'EDUCATION', value: "St. Xavier's College, Ranchi", sub: 'B.Com (Hons.) • 2024-2027' },
+              { label: 'LOCATION', value: 'Delhi, India' },
+              { label: 'EDUCATION', value: 'B.Tech CSE (Data Science)' },
               { label: 'STATUS', value: 'Learning. Building. Shipping.', glow: true },
             ].map((item, i) => (
               <motion.div 
