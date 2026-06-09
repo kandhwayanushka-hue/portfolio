@@ -272,27 +272,68 @@ function Hero() {
         >
           LEARNING. BUILDING. GROWING.
         </motion.p>
-        
-        <div className="overflow-hidden">
-          <motion.h1 
-            className="font-display text-[15vw] leading-[0.8] font-bold tracking-[-0.03em]"
-            initial={{ y: "100%" }}
-            animate={{ y: 0 }}
-            transition={{ duration: 1, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-text-primary to-text-secondary">ANUSHKA</span>
-          </motion.h1>
-        </div>
-        
-        <div className="overflow-hidden">
-          <motion.h1 
-            className="font-display text-[15vw] leading-[0.8] font-bold tracking-[-0.03em] text-text-secondary/50"
-            initial={{ y: "100%" }}
-            animate={{ y: 0 }}
-            transition={{ duration: 1, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-          >
-            KANDHWAY
-          </motion.h1>
+
+        <div className="relative">
+          <div className="absolute -inset-20 pointer-events-none overflow-hidden">
+            <motion.div
+              className="absolute w-72 h-72 rounded-full bg-purple-500/20 blur-[100px]"
+              animate={{
+                x: [0, 100, -50, 0],
+                y: [0, -80, 60, 0],
+                scale: [1, 1.2, 0.9, 1],
+              }}
+              transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+            />
+            <motion.div
+              className="absolute w-96 h-96 rounded-full bg-accent-pink/15 blur-[120px] right-0"
+              animate={{
+                x: [0, -80, 50, 0],
+                y: [0, 60, -100, 0],
+                scale: [1, 0.8, 1.3, 1],
+              }}
+              transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+            />
+            <motion.div
+              className="absolute w-64 h-64 rounded-full bg-blue-500/15 blur-[90px] bottom-0 left-1/3"
+              animate={{
+                x: [0, 60, -80, 0],
+                y: [0, -50, 40, 0],
+                scale: [1, 1.4, 0.8, 1],
+              }}
+              transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+            />
+            <motion.div
+              className="absolute w-48 h-48 rounded-full bg-yellow-500/10 blur-[80px] top-1/3 right-1/4"
+              animate={{
+                x: [0, -100, 50, 0],
+                y: [0, 80, -60, 0],
+                scale: [1, 0.7, 1.2, 1],
+              }}
+              transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
+            />
+          </div>
+          
+          <div className="overflow-hidden">
+            <motion.h1 
+              className="font-display text-[15vw] leading-[0.8] font-bold tracking-[-0.03em] relative"
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              transition={{ duration: 1, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-text-primary to-text-secondary">ANUSHKA</span>
+            </motion.h1>
+          </div>
+          
+          <div className="overflow-hidden">
+            <motion.h1 
+              className="font-display text-[15vw] leading-[0.8] font-bold tracking-[-0.03em] text-text-secondary/50 relative"
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              transition={{ duration: 1, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            >
+              KANDHWAY
+            </motion.h1>
+          </div>
         </div>
 
         <motion.div 
