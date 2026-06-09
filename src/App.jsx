@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { motion, useScroll, useTransform, useSpring, useInView } from 'framer-motion'
+import { motion, useScroll, useTransform, useSpring, useInView, useMotionValue, useVelocity, useAnimationFrame } from 'framer-motion'
 
 const skills = {
   frontend: ['HTML', 'CSS', 'JavaScript', 'React', 'Bootstrap', 'Tailwind'],
@@ -215,6 +215,13 @@ function Hero() {
   const { scrollY } = useScroll()
   const y = useTransform(scrollY, [0, 500], [0, 150])
   const opacity = useTransform(scrollY, [0, 300], [1, 0])
+  const sphereRef = useRef(null)
+  
+  useAnimationFrame((t) => {
+    if (sphereRef.current) {
+      sphereRef.current.style.transform = `rotateY(${t * 0.02}deg) rotateX(${Math.sin(t * 0.01) * 10}deg)`
+    }
+  })
   
   return (
     <section className="min-h-screen flex flex-col justify-center px-6 md:px-20 relative overflow-hidden">
@@ -231,6 +238,30 @@ function Hero() {
           className="absolute bottom-1/4 left-1/4 w-64 h-64 bg-accent-pink/10 rounded-full blur-[100px]"
         />
       </motion.div>
+
+      <div ref={sphereRef} className="absolute right-10 md:right-20 top-1/2 -translate-y-1/2 w-64 h-64 md:w-96 md:h-96" style={{ transformStyle: "preserve-3d" }}>
+        {[...Array(20)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute inset-0 rounded-full border border-accent/20"
+            style={{
+              transform: `rotateY(${i * 18}deg) rotateX(${i * 9}deg) translateZ(${80 + i * 8}px)`,
+              width: `${100 - i * 2}%`,
+              height: `${100 - i * 2}%`,
+              left: `${i}%`,
+              top: `${i}%`,
+            }}
+            animate={{
+              opacity: [0.1, 0.3, 0.1],
+              borderColor: ['rgba(0,212,255,0.1)', 'rgba(0,212,255,0.3)', 'rgba(0,212,255,0.1)'],
+            }}
+            transition={{ duration: 3 + i * 0.2, repeat: Infinity, ease: "easeInOut" }}
+          />
+        ))}
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="w-3 h-3 bg-accent rounded-full blur-sm" />
+        </div>
+      </div>
       
       <motion.div style={{ y, opacity }} className="relative z-10">
         <motion.p 
@@ -375,6 +406,24 @@ function About() {
           </div>
           
           <div className="md:col-span-5 space-y-8 mt-8 md:mt-0">
+            <motion.div
+              className="relative w-full aspect-square max-w-xs mx-auto overflow-hidden border border-accent/20 group"
+              variants={fadeInUp}
+              whileHover={{ scale: 1.02 }}
+              transition={{ type: "spring", stiffness: 300 }}
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-accent/10 to-accent-pink/10" />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <motion.span 
+                  className="font-mono text-text-secondary/40 text-xs tracking-widest"
+                  animate={{ opacity: [0.3, 0.6, 0.3] }}
+                  transition={{ duration: 3, repeat: Infinity }}
+                >
+                  [ YOUR PHOTO ]
+                </motion.span>
+              </div>
+            </motion.div>
+            
             {[
               { label: 'LOCATION', value: 'Delhi, India' },
               { label: 'EDUCATION', value: 'B.Tech CSE (Data Science)' },
@@ -556,6 +605,38 @@ function Projects() {
       })
   }, [])
 
+  function TiltCard({ children, className = "" }) {
+    const ref = useRef(null)
+    const x = useMotionValue(0)
+    const y = useMotionValue(0)
+    
+    const handleMouse = (e) => {
+      const rect = ref.current.getBoundingClientRect()
+      const xVal = (e.clientX - rect.left) / rect.width - 0.5
+      const yVal = (e.clientY - rect.top) / rect.height - 0.5
+      x.set(xVal * 10)
+      y.set(yVal * -10)
+    }
+    
+    const handleLeave = () => {
+      x.set(0)
+      y.set(0)
+    }
+    
+    return (
+      <motion.div
+        ref={ref}
+        onMouseMove={handleMouse}
+        onMouseLeave={handleLeave}
+        style={{ rotateX: x, rotateY: y }}
+        transition={{ type: "spring", stiffness: 300, damping: 20 }}
+        className={className}
+      >
+        {children}
+      </motion.div>
+    )
+  }
+
   return (
     <section id="work" className="min-h-screen py-40 px-6 md:px-20 relative">
       <motion.div 
@@ -588,47 +669,63 @@ function Projects() {
             <p className="font-mono text-accent-pink text-sm">Error: {error}</p>
           </motion.div>
         ) : (
-          <div className="grid gap-4">
+          <div className="grid md:grid-cols-2 gap-6">
             {repos.map((repo, idx) => (
-              <motion.a
-                key={repo.id}
-                href={repo.html_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group relative p-6 md:p-8 bg-bg-secondary border border-text-secondary/10 hover:border-accent/30 transition-all overflow-hidden"
-                initial={{ opacity: 0, x: -60 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: idx * 0.05 }}
-                whileHover={{ x: 8 }}
-              >
-                <motion.div 
-                  className="absolute inset-0 bg-accent/5 translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500"
-                />
-                <div className="relative flex flex-col md:flex-row md:items-center justify-between gap-4">
-                  <div className="flex-1">
-                    <h3 className="font-display text-2xl md:text-3xl font-bold text-text-primary group-hover:text-accent transition-colors">
-                      {repo.name}
-                    </h3>
-                    <p className="text-text-secondary mt-2 line-clamp-1">{repo.description || 'No description yet'}</p>
+              <TiltCard key={repo.id}>
+                <motion.a
+                  href={repo.html_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group relative p-6 md:p-8 bg-bg-secondary border border-text-secondary/10 hover:border-accent/30 transition-all overflow-hidden block"
+                  initial={{ opacity: 0, y: 60 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: idx * 0.05 }}
+                >
+                  <motion.div 
+                    className="absolute inset-0 bg-accent/5 translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500"
+                  />
+                  
+                  <div className="relative aspect-video mb-4 bg-bg-primary border border-text-secondary/5 overflow-hidden">
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <motion.span 
+                        className="font-mono text-text-secondary/30 text-xs tracking-widest"
+                        animate={{ opacity: [0.2, 0.5, 0.2] }}
+                        transition={{ duration: 3, repeat: Infinity }}
+                      >
+                        [ SCREENSHOT ]
+                      </motion.span>
+                    </div>
+                    <motion.div 
+                      className="absolute bottom-0 left-0 right-0 h-1 bg-accent"
+                      initial={{ scaleX: 0 }}
+                      whileInView={{ scaleX: 1 }}
+                      transition={{ duration: 0.8, delay: idx * 0.1 }}
+                    />
                   </div>
                   
-                  <div className="flex items-center gap-6 font-mono text-sm text-text-secondary">
-                    <motion.span 
-                      className="px-2 py-1 bg-bg-primary rounded"
-                      whileHover={{ backgroundColor: '#00d4ff', color: '#050505' }}
-                    >
-                      {repo.language || '—'}
-                    </motion.span>
-                    <span className="flex items-center gap-1">
-                      <motion.span whileHover={{ scale: 1.2 }}>★</motion.span> {repo.stargazers_count}
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <motion.span whileHover={{ rotate: 20 }}>⑂</motion.span> {repo.forks_count}
-                    </span>
+                  <div className="relative flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div className="flex-1">
+                      <h3 className="font-display text-xl md:text-2xl font-bold text-text-primary group-hover:text-accent transition-colors">
+                        {repo.name}
+                      </h3>
+                      <p className="text-text-secondary mt-2 text-sm line-clamp-2">{repo.description || 'No description yet'}</p>
+                    </div>
+                    
+                    <div className="flex items-center gap-4 font-mono text-sm text-text-secondary">
+                      <motion.span 
+                        className="px-2 py-1 bg-bg-primary rounded text-xs"
+                        whileHover={{ backgroundColor: '#00d4ff', color: '#050505' }}
+                      >
+                        {repo.language || '—'}
+                      </motion.span>
+                      <span className="flex items-center gap-1">
+                        <motion.span whileHover={{ scale: 1.2 }}>★</motion.span> {repo.stargazers_count}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              </motion.a>
+                </motion.a>
+              </TiltCard>
             ))}
           </div>
         )}
