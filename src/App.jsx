@@ -61,7 +61,7 @@ function AnimatedText({ text, className = "", delay = 0 }) {
             {word}
           </motion.span>
         </span>
-      )}
+      ))}
     </span>
   )
 }
